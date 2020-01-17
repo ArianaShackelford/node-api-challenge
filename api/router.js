@@ -82,11 +82,31 @@ router.delete('/projects/:id',validateProjectId, (req, res) => {
 
 
 //create a new action
+router.post('/projects/:id/actions', validateProjectId, validateAction, (req,res) => {
+    Actions.insert(req.body)
+    .then(newAction => {
+        res.status(201).json(newAction)
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({message:"We ran into an issue saving your action"})
+    })
+})
 
 
 
 // get actions from a specific project
-
+router.get('/projects/:id/actions', validateProjectId, (req,res) => {
+    const id = req.params.id
+    Projects.getProjectActions(id)
+    .then(projectActions => {
+        res.status(200).json(projectActions)
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).json({message: "We ran into an issue fetching actions for this project"})
+    })
+})
 
 
 //update actions
@@ -133,5 +153,14 @@ function validateProject(req, res, next) {
 
 
 //validate action
+function validateAction(req, res, next) {
+    if(!req.body){
+      res.status(400).json({message : "missing Action data"})
+    }else if(!req.body.notes || !req.body.description || !req.body.project_id){
+      res.status(400).json({message : "missing required fields"})
+    }else{
+      next();
+    }
+  }
 
 module.exports = router;
