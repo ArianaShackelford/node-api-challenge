@@ -108,14 +108,48 @@ router.get('/projects/:id/actions', validateProjectId, (req,res) => {
     })
 })
 
+//get action by id
+
+router.get('/actions/:id', validateActionId, (req, res) => {
+    const id = req.params.id
+    Actions.get(id)
+    .then(action => {
+        res.status(200).json(action)
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({message: "There was an error finding that action"})
+    })
+  });
 
 //update actions
 
-
+router.put('/actions/:id', validateAction, validateActionId,(req,res) => {
+    const id = req.params.id;
+    Actions.update(id, req.body)
+    .then(updatedAction => {
+        res.status(201).json(updatedAction);
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({message: "We ran into an error updating this Action"})
+    })
+})
 
 
 //delete actions
-
+router.delete('/actions/:id',validateActionId, (req, res) => {
+    const id = req.params.id;
+    Actions.remove(id)
+    .then(projectToDelete => {
+      console.log("Action has been deleted")
+      res.status(200).json(req.action)
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({message: "we ran into and issue deleting Action"})
+    })
+  });
 
 
 
@@ -161,6 +195,24 @@ function validateAction(req, res, next) {
     }else{
       next();
     }
+  }
+
+  //validate action id
+  function validateActionId(req, res, next) {
+    const id = req.params.id
+    Actions.get(id)
+    .then(action => {
+      if(!action){
+        res.status(400).json({message: "Invalid action id"})
+      }else {
+         req.action = action
+        next();
+      }
+    })
+    .catch(err => {
+        console.log(err)
+      res.status(500).json({message: "There was an error finding that action"})
+    })
   }
 
 module.exports = router;
