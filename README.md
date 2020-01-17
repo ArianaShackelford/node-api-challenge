@@ -40,13 +40,23 @@ Demonstrate your understanding of this Sprint's concepts by answering the follow
 
 - [ ] Mention two parts of Express that you learned about this week.
 
+        This week I learned about how to create an api using express and how tho use express to write custom middleware
+
 - [ ] Describe Middleware?
+
+    Middleware are functions that are used to make other processes easier by logging or providing validation, and can be used globaly or locally.
 
 - [ ] Describe a Resource?
 
+    Resources are the things you're using, what you are performing crud operations on. They're usually nouns, so if you are listing songs or restraunts, or types of animals ect... all of those are resources.
+
 - [ ] What can the API return to help clients know if a request was successful?
 
+    Status codes, and json messages
+
 - [ ] How can we partition our application into sub-applications?
+
+        By using different Routers and databases. 
 
 ## Minimum Viable Product
 
